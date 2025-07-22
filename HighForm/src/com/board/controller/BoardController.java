@@ -259,5 +259,4 @@ public class BoardController {
         filterByType(currentBoardType);
         updatePagination();
     }
-    
 }

@@ -1,12 +1,6 @@
 package com;
-
-
-
-
 import java.sql.SQLException;
-
 import com.board.dao.BoardDao;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -51,15 +45,11 @@ public class Main extends Application {
     }
 
     private void showLogin() throws Exception {
-//        Parent login = FXMLLoader.load(getClass().getResource("/view/login/login.fxml"));
-//        primaryStage.setScene(new Scene(login, 1000, 750));
     	Parent splash = FXMLLoader.load(getClass().getResource("/view/login/login.fxml"));
     	Scene scene = new Scene(splash, 1000, 750);
     	scene.getStylesheets().add(getClass().getResource("/fonts/global.css").toExternalForm());
     	primaryStage.setScene(scene);
     }
-    
-    
 
     public static void main(String[] args) {
         launch(args);

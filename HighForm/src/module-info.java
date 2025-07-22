@@ -7,6 +7,7 @@ module HighForm {
 	requires java.sql;
 	
     opens com to javafx.graphics, javafx.fxml;
+    opens com.manager.controller to javafx.fxml; 
     opens com.login.controller to javafx.fxml;
     opens com.board to javafx.graphics, javafx.fxml;  // 이 줄 추가
     opens com.board.controller to javafx.fxml;

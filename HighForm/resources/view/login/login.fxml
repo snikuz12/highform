@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-
 <StackPane xmlns:fx="http://javafx.com/fxml"
 	style="-fx-background-color: #188492;" prefWidth="1000"
 	prefHeight="750">

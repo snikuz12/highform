@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import java.lang.String?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.manager.controller.AddMemberController">
+	<top>
+		<HBox alignment="CENTER_LEFT" prefHeight="40.0"
+			style="-fx-background-color: #4472C4;">
+			<children>
+				<Label prefHeight="25.0" prefWidth="123.0" text="● 회원 등록"
+					textFill="WHITE">
+					<font>
+						<Font name="System Bold" size="14.0" />
+					</font>
+					<HBox.margin>
+						<Insets left="10.0" />
+					</HBox.margin>
+				</Label>
+				<Region prefHeight="40.0" prefWidth="326.0" />
+				<Button mnemonicParsing="false" prefHeight="33.0"
+					prefWidth="0.0" text="x" />
+			</children>
+		</HBox>
+	</top>
+	<center>
+		<VBox prefHeight="450.0" prefWidth="500.0" spacing="15.0">
+			<children>
+				<GridPane hgap="10.0" vgap="15.0">
+					<columnConstraints>
+						<ColumnConstraints hgrow="NEVER" minWidth="80.0"
+							prefWidth="80.0" />
+						<ColumnConstraints hgrow="ALWAYS" />
+					</columnConstraints>
+					<rowConstraints>
+						<RowConstraints minHeight="30.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="30.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="30.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="30.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="30.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="30.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="80.0" prefHeight="80.0"
+							vgrow="SOMETIMES" />
+					</rowConstraints>
+					<children>
+						<!-- ID -->
+						<Label text="ID :" GridPane.columnIndex="0"
+							GridPane.rowIndex="0">
+							<font>
+								<Font size="12.0" />
+							</font>
+						</Label>
+						<TextField fx:id="loginIdField" prefHeight="25.0"
+							text="ks371" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+						<!-- 이름 -->
+						<Label text="이름 :" GridPane.columnIndex="0"
+							GridPane.rowIndex="1">
+							<font>
+								<Font size="12.0" />
+							</font>
+						</Label>
+						<TextField fx:id="nameField" prefHeight="25.0"
+							GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+						<!-- 연락처 -->
+						<Label text="연락처 :" GridPane.columnIndex="0"
+							GridPane.rowIndex="2">
+							<font>
+								<Font size="12.0" />
+							</font>
+						</Label>
+						<TextField fx:id="phoneField" prefHeight="25.0"
+							GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+						<!-- e-mail -->
+						<Label text="e-mail :" GridPane.columnIndex="0"
+							GridPane.rowIndex="3">
+							<font>
+								<Font size="12.0" />
+							</font>
+						</Label>
+						<TextField fx:id="emailField" prefHeight="25.0"
+							GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+						<!-- 소속 -->
+						<Label text="소속 :" GridPane.columnIndex="0"
+							GridPane.rowIndex="4">
+							<font>
+								<Font size="12.0" />
+							</font>
+						</Label>
+						<ComboBox fx:id="courseCombo" prefHeight="33.0"
+							prefWidth="345.0" promptText="시스템 16기" GridPane.columnIndex="1"
+							GridPane.rowIndex="4">
+							<items>
+								<FXCollections fx:factory="observableArrayList">
+									<String fx:value="시스템 16기" />
+									<String fx:value="시스템 15기" />
+									<String fx:value="시스템 17기" />
+									<String fx:value="네트워크 10기" />
+									<String fx:value="보안 5기" />
+								</FXCollections>
+							</items>
+							<value>
+								<String fx:value="--" />
+							</value>
+						</ComboBox>
+
+						<!-- 직급 -->
+						<Label text="직급 :" GridPane.columnIndex="0"
+							GridPane.rowIndex="5">
+							<font>
+								<Font size="12.0" />
+							</font>
+						</Label>
+						<ComboBox fx:id="positionCombo" prefHeight="33.0"
+							prefWidth="345.0" promptText="--" GridPane.columnIndex="1"
+							GridPane.rowIndex="5">
+							<items>
+								<FXCollections fx:factory="observableArrayList">
+									<String fx:value="--" />
+									<String fx:value="학생" />
+									<String fx:value="강사" />
+									<String fx:value="관리자" />
+								</FXCollections>
+							</items>
+							<value>
+								<String fx:value="--" />
+							</value>
+						</ComboBox>
+
+						<!-- 비고 -->
+						<Label alignment="TOP_LEFT" text="비고 :"
+							GridPane.columnIndex="0" GridPane.rowIndex="6"
+							GridPane.valignment="TOP">
+							<font>
+								<Font size="12.0" />
+							</font>
+							<GridPane.margin>
+								<Insets top="5.0" />
+							</GridPane.margin>
+						</Label>
+						<TextArea fx:id="noteArea" prefHeight="80.0"
+							text="개인사정으로 2028.07.23 부터 등원 가능" wrapText="true"
+							GridPane.columnIndex="1" GridPane.rowIndex="6" />
+					</children>
+				</GridPane>
+			</children>
+			<padding>
+				<Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
+			</padding>
+		</VBox>
+	</center>
+	<bottom>
+		<HBox alignment="CENTER_RIGHT" spacing="10.0">
+			<children>
+				<Button fx:id="registerBtn" prefHeight="30.0"
+					prefWidth="60.0" text="등록">
+					<font>
+						<Font size="12.0" />
+					</font>
+				</Button>
+			</children>
+			<padding>
+				<Insets bottom="20.0" left="20.0" right="30.0" top="10.0" />
+			</padding>
+		</HBox>
+	</bottom>
+</BorderPane>
