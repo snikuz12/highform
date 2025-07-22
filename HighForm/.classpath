@@ -2,7 +2,17 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="img/|img/" kind="src" path="resources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/zulu21.42.19-ca-fx-jdk21.0.7-macosx_aarch64">
+	<classpathentry kind="lib" path="/Users/jiwon/Downloads/lombok.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/jiwon/zulu21.42.19-ca-fx-jdk21.0.7-macosx_aarch64/zulu-21.jdk/Contents/Home/lib/jrt-fs.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/jiwon/Downloads/ojdbc11.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

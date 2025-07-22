@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+	style="-fx-background-color: #188492;" prefWidth="1000"
+	prefHeight="750">
+	<VBox alignment="CENTER" spacing="0">
+		<StackPane alignment="CENTER">
+			<VBox
+				style="-fx-background-color: #eaeaea; -fx-border-color: #222; -fx-border-width: 2; -fx-background-radius: 4; -fx-border-radius: 4; -fx-effect: dropshadow(gaussian, #222, 8, 0.2, 0, 2);"
+				maxWidth="350" minWidth="350" maxHeight="230" minHeight="230"
+				alignment="TOP_CENTER">
+				<!-- 상단 파란색 바 -->
+				<HBox
+					style="-fx-background-color: linear-gradient(to bottom, #1a4fa3 90%, #eaeaea 100%); -fx-padding: 0 0 0 0; -fx-border-width: 0 0 2 0; -fx-border-color: #222;">
+					<ImageView fitWidth="20" fitHeight="20"
+						style="-fx-padding: 2 4 2 6;">
+						<image>
+							<Image url="@../../img2/key_icon.png" />
+						</image>
+					</ImageView>
+					<Label text="welcome to higtForm"
+						style="-fx-font-family: 'DungGeunMo'; -fx-font-size: 16; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 0 0 0 4;" />
+					<Pane HBox.hgrow="ALWAYS" />
+					<Button text="✕"
+						style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14; -fx-padding: 0 8 0 8;"
+						focusTraversable="false" />
+				</HBox>
+				<!-- 안내문구 -->
+				<Label text="Type a user name and password to log on"
+					style="-fx-font-family: 'Consolas'; -fx-font-size: 12; -fx-text-fill: #222; -fx-padding: 8 0 0 12; -fx-alignment: CENTER_LEFT;" />
+				<!-- 입력창 -->
+
+
+
+				<GridPane hgap="8" vgap="8" alignment="CENTER_LEFT"
+					style="-fx-padding: 8 0 0 24;">
+					<!-- User name 행 -->
+					<ImageView fitWidth="24" fitHeight="24"
+						GridPane.rowIndex="0" GridPane.columnIndex="0">
+						<image>
+							<Image url="@../../img2/pc_icon.png" />
+						</image>
+					</ImageView>
+					<Label text="User name :" GridPane.rowIndex="0"
+						GridPane.columnIndex="1" />
+					<TextField GridPane.rowIndex="0" GridPane.columnIndex="2"
+						prefWidth="150" />
+
+					<!-- Password 행 -->
+					<ImageView fitWidth="24" fitHeight="24"
+						GridPane.rowIndex="1" GridPane.columnIndex="0">
+						<image>
+							<Image url="@../../img2/pc_icon.png" />
+						</image>
+					</ImageView>
+					<Label text="Password :" GridPane.rowIndex="1"
+						GridPane.columnIndex="1" />
+					<PasswordField GridPane.rowIndex="1"
+						GridPane.columnIndex="2" prefWidth="150" />
+				</GridPane>
+				<!-- 버튼 -->
+				<HBox alignment="CENTER" spacing="16"
+					style="-fx-padding: 10 0 0 0;">
+					<Button text="OK" minWidth="80"
+						style="-fx-font-family: 'Consolas';" />
+					<Button text="Cancel" minWidth="80"
+						style="-fx-font-family: 'Consolas';" />
+				</HBox>
+				<Pane minHeight="8" />
+			</VBox>
+		</StackPane>
+	</VBox>
+</StackPane>

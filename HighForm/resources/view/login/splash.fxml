@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.paint.Color?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.login.controller.SplashController" style="-fx-background-color: black;">
+    <Rectangle fx:id="cursor" width="40" height="8" fill="white" translateX="-400" translateY="-300"/>
+</StackPane>
