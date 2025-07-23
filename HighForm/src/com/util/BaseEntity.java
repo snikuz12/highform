@@ -15,3 +15,4 @@ public abstract class BaseEntity {
 
     public void markAsDeleted() { this.del_yn = 'Y'; }
 }
+
