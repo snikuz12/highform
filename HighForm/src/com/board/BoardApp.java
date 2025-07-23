@@ -1,8 +1,6 @@
 package com.board;
 
-import java.sql.SQLException;
 
-import com.board.dao.BoardDao;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

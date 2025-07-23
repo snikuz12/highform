@@ -1,9 +1,9 @@
 .root {
-    -fx-font-family: 'DungGeunMo';
+	-fx-font-family: 'DungGeunMo';
 }
 
 
 .table-view .column-header {
-         -fx-font-family: "DungGeunMo";
-         -fx-font-size: 14px;
+	-fx-font-family: "DungGeunMo";
+	-fx-font-size: 14px;
 }

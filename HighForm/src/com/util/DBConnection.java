@@ -12,6 +12,7 @@ public class DBConnection {
     private static String url;
     private static String user;
     private static String password;
+    private static String geminiKey;
     private static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
 
     static {
@@ -27,6 +28,7 @@ public class DBConnection {
                 url = props.getProperty("db.url");
                 user = props.getProperty("db.user");
                 password = props.getProperty("db.password");
+                geminiKey = props.getProperty("API_KEY");
                 
                 System.out.println(url);
                 
@@ -42,6 +44,10 @@ public class DBConnection {
         System.out.println("[DB] Connected to: " + conn.getMetaData().getURL());
         System.out.println("[DB] User: " + conn.getMetaData().getUserName());
         return conn;
+    }
+    
+    public static String getKey() {
+        return geminiKey;
     }
 
 }

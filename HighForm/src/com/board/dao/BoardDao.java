@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,17 +103,7 @@ public class BoardDao {
 		        entity.setUserId(selectRs.getLong("user_id"));
 		        entity.setCreatedAt(selectRs.getDate("created_at"));
 		    }
-		    
-//		    if (selectRs.next()) {
-//		        entity = Board.builder()
-//		        		.author(selectRs.getString("author"))
-//		        		.title(selectRs.getString("title"))
-//		        		.content(selectRs.getString("content"))
-//		        		.type(selectRs.getString("type").equals(BoardCategory.BOARD.name())  ? BoardCategory.BOARD : selectRs.getString("type").equals(BoardCategory.DATA_ROOM.name()) ? BoardCategory.DATA_ROOM :  BoardCategory.NOTICE )
-//		        		.fileId(selectRs.getLong("file_id"))
-//		        		.userId(selectRs.getLong("user_id"))
-//		        		.build();
-//		    }
+		   
 		   
 		   psmt.executeUpdate();
 		   
@@ -176,5 +165,43 @@ public class BoardDao {
 		   e.printStackTrace();
 	   }
 	   return null;
+   }
+   
+   // 게시물 수정 
+   public boolean updateBoard(Long boardId, Board board) {
+	    String sql = BoardSQL.UPDATE_BOARD;
+	        
+	        try (Connection conn = getConnection();
+	             PreparedStatement psmt = conn.prepareStatement(sql)) {
+	            
+	            psmt.setString(1, board.getTitle());
+	            psmt.setString(2, board.getContent());
+	            psmt.setObject(3, board.getFileId());
+	            psmt.setLong(4, boardId);
+	            
+	            // UPDATE 문에서는 getGeneratedKeys() 호출하지 않음
+	            int affectedRows = psmt.executeUpdate();
+	            return affectedRows > 0;  // 업데이트된 행이 있으면 true 반환
+	            
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+   }
+
+   // 게시물 삭제 
+   public void deleteBoard(Long boardId) {
+	    String sql = BoardSQL.DELETE_BOARD;
+	        
+	        try (Connection conn = getConnection();
+	             PreparedStatement psmt = conn.prepareStatement(sql)) {
+	            
+	            psmt.setLong(1, boardId);
+	           
+	 		   psmt.executeUpdate();
+	            
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
    }
 }

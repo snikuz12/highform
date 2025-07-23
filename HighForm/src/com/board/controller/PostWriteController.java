@@ -24,7 +24,9 @@ public class PostWriteController {
     @FXML private Button browseBtn, submitBtn;
 
     private BoardController boardController;
+
     private PostDetailController postDetailController;
+
     private BoardCategory selectedType = BoardCategory.DATA_ROOM;
     private String attachmentPath = "";
     private final BoardDao boardDao;
@@ -39,11 +41,12 @@ public class PostWriteController {
         this.boardController = boardController;
     }
     
+
     public void setPostDetailController(PostDetailController postDetailController) {
     	this.postDetailController = postDetailController;
     }
     
-    
+
     
     @FXML
     public void initialize() {

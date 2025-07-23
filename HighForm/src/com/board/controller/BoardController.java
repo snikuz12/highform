@@ -62,11 +62,7 @@ public class BoardController {
         boardTable.setMaxHeight(tableHeight);
 
         
-        // DB 게시물 데이터 호출 후 저장
-        allItems.addAll (boardDao.getBoardList(BoardCategory.BOARD));
-        allItems.addAll (boardDao.getBoardList(BoardCategory.DATA_ROOM));
-        allItems.addAll (boardDao.getBoardList(BoardCategory.NOTICE));
-        
+
 
         // 컬럼 바인딩
         noColumn.setCellValueFactory(cellData -> cellData.getValue().noProperty().asObject());
@@ -113,6 +109,8 @@ public class BoardController {
 
         
         // 초기화 - PageFactory는 한 번만 설정
+        allItems.clear();
+        allItems.addAll (boardDao.getBoardList(BoardCategory.NOTICE));
         filterByType(BoardCategory.NOTICE);
         pagination.setPageFactory(this::createPage);
         updatePagination();
@@ -123,7 +121,11 @@ public class BoardController {
     private void handleNoticeBtn(ActionEvent event) {
         currentBoardType = BoardCategory.NOTICE;
         pathLabel.setText("C:\\Board\\Notice");
+        
+        allItems.clear();
+        allItems.addAll (boardDao.getBoardList(BoardCategory.NOTICE));
         filterByType(BoardCategory.NOTICE);
+        
         updatePagination();
     }
 
@@ -132,7 +134,14 @@ public class BoardController {
     private void handleResourceBtn(ActionEvent event) {
         currentBoardType = BoardCategory.DATA_ROOM;
         pathLabel.setText("C:\\Board\\DataRoom");
+
+        allItems.clear();
+        allItems.addAll (boardDao.getBoardList(BoardCategory.DATA_ROOM));
+
         filterByType(BoardCategory.DATA_ROOM);
+        
+
+        
         updatePagination();
     }
 
@@ -141,6 +150,10 @@ public class BoardController {
     private void handleBoardBtn(ActionEvent event) {
         currentBoardType = BoardCategory.BOARD;
         pathLabel.setText("C:\\Board\\Board");
+        // DB 게시물 데이터 호출 후 저장
+        allItems.clear();
+        allItems.addAll (boardDao.getBoardList(BoardCategory.BOARD));
+
         filterByType(BoardCategory.BOARD);
         updatePagination();
     }

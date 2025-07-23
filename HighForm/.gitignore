@@ -1,1 +1,11 @@
 /bin/
+# Eclipse 설정 및 빌드 결과
+.project
+.classpath
+.settings/
+.metadata/
+bin/
+target/
+
+# 운영체제에 따라 무시할 파일 예시
+.DS_Store

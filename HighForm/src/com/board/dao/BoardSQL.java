@@ -29,7 +29,8 @@ public class BoardSQL {
 	
 	public static final String GET_BOARD =
 			"""
-				SELECT * FROM BOARD WHERE id = ?
+				SELECT * FROM BOARD 
+				WHERE id = ? AND del_yn = 'N'
 			""";
 
 	
@@ -41,6 +42,27 @@ public class BoardSQL {
 				FROM 
 			    	BOARD b
 				WHERE 
-			    	type = ?
+			    	type = ? AND del_yn = 'N'
+			""";
+			
+	// 게시글 수정을 위한 SQL 쿼리들
+	// TODO:: 오류 해결  (NVL를 통한 유효한 값에 따른 update 처리)
+	public static final String UPDATE_BOARD =
+			"""
+            UPDATE BOARD SET 
+                title = NVL(?, title),
+                content = NVL(?, content),
+                file_id = NVL(?, file_id),
+                updated_at = SYSDATE 
+            WHERE id = ? AND del_yn = 'N'
+            """;
+	
+	// 게시글 삭제
+	public static final String DELETE_BOARD =
+			"""
+			UPDATE BOARD 
+			SET
+				del_yn = 'Y'
+			WHERE id = ?
 			""";
 }

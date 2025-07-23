@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.AllArgsConstructor;
+
 @AllArgsConstructor
 public class BoardWriteController {
     
@@ -29,7 +30,9 @@ public class BoardWriteController {
     @FXML private Button browseBtn, submitBtn, closeBtn;
     
     private BoardController boardController;
+
     private PostDetailController postDetailController;
+
     private File selectedFile;
     
     private final BoardDao boardDao;
@@ -44,9 +47,11 @@ public class BoardWriteController {
         this.boardController = boardController;
     }
     
+
     public void setPostDetailController(PostDetailController postDetailController) {
     	this.postDetailController = postDetailController;
     }
+
     
     
     @FXML
@@ -72,7 +77,7 @@ public class BoardWriteController {
         
         Stage stage = (Stage) browseBtn.getScene().getWindow();
         selectedFile = fileChooser.showOpenDialog(stage);
-        
+
         if (selectedFile != null) {
             filePathField.setText(selectedFile.getName());
         }
