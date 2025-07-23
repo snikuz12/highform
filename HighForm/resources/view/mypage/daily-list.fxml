@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mypage.controller.DailyListController"
+      spacing="10">
+
+    <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
+
+    <Label fx:id="dateLabel" style="-fx-font-weight: bold;"/>
+
+    <TableView fx:id="table" prefHeight="240">
+        <columns>
+            <TableColumn fx:id="titleCol"  text="제목"    prefWidth="120"/>
+            <TableColumn fx:id="memoCol"   text="메모"    prefWidth="180"/>
+            <TableColumn fx:id="periodCol" text="기간"    prefWidth="120"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="8" alignment="CENTER_RIGHT">
+        <Button text="삭제" onAction="#onDelete" fx:id="deleteBtn"/>
+        <Button text="수정" onAction="#onEdit"   fx:id="editBtn"/>
+        <Button text="닫기" onAction="#onClose"/>
+    </HBox>
+</VBox>
