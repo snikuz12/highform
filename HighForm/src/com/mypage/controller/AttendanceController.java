@@ -9,15 +9,19 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.login.model.User;
+import com.login.controller.DesktopController; 
 import com.mypage.Model.attendance.Attendance;
 import com.mypage.dao.attendance.AttendanceDAO;
 import java.time.format.DateTimeFormatter; 
 
 public class AttendanceController {
-
+	@FXML
+	private Button closeButton;  // 버튼 
     // =====================
     // FXML 컴포넌트 선언
     // =====================
@@ -41,19 +45,75 @@ public class AttendanceController {
     private AttendanceDAO attendanceDAO = AttendanceDAO.getInstance();
 
     // =====================
+    // 사용자 정보 (중복 필드 정리)
+    // =====================
+    private User currentUser;  // 하나의 필드만 사용
+
+    // =====================
     // 화면 초기화 시 호출
     // =====================
     @FXML
     private void initialize() {
-        this.userId = 1L; // 임시값(로그인 붙이면 동적으로 할당)
+        // userId는 setCurrentUser에서 설정하도록 변경
         loadAttendanceList();   // 출결 리스트 로드
         loadAttendanceRate();   // 출결률 로드
     }
 
+    /**
+     * 현재 사용자 설정 (DesktopController에서 호출)
+     */
+    public void setCurrentUser(User user) {
+        if (user == null) {
+            System.err.println("[ERROR] AttendanceController.setCurrentUser: user가 null입니다.");
+            return;
+        }
+        
+        this.currentUser = user;  // 하나의 필드만 사용
+        this.userId = user.getId();  // User 객체에서 ID 가져오기
+        System.out.println("[DEBUG] AttendanceController currentUser 설정: " + user.getName() + " (ID: " + userId + ")");
+        
+        // 사용자 정보 설정 후 데이터 다시 로드
+        loadAttendanceList();
+        loadAttendanceRate();
+    }
+    
+    @FXML //창닫기같은 뒤로가기 - 사용자 정보 유지하며 데스크탑으로 복귀
+    private void handleCloseButton() {
+        try {
+            // 현재 스테이지 가져오기
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login/Desktop.fxml"));
+            Parent root = loader.load();
+
+            // DesktopController에 사용자 정보 전달
+            DesktopController desktopController = loader.getController();
+            if (desktopController != null && currentUser != null) {
+                desktopController.setCurrentUser(currentUser);
+                System.out.println("[DEBUG] 데스크탑으로 사용자 정보 전달: " + currentUser.getName());
+            } else {
+                System.err.println("[ERROR] DesktopController 또는 currentUser가 null입니다.");
+            }
+
+            // 새로운 씬 설정
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("페이지 이동 오류", "데스크탑으로 이동할 수 없습니다.");
+        }
+    }
+    
     /* -----------------------------------------------------------
      * 출결 리스트 로드
      * ----------------------------------------------------------- */
     private void loadAttendanceList() {
+        // userId가 null인 경우 임시값 사용 (initialize에서 호출될 때)
+        if (userId == null) {
+            userId = 1L; // 임시값
+        }
+        
         try {
             int offset = (page - 1) * size;
 
@@ -116,7 +176,6 @@ public class AttendanceController {
         }
     }
 
-
     /**
      * 동적으로 페이지네이션 버튼(Prev, 1~N, Next) 생성 및 이벤트 등록
      *  - 10개씩 페이징 그룹 단위로 보임(11페이지 이상부터 우측으로 이동)
@@ -177,6 +236,11 @@ public class AttendanceController {
      * 출결률(%) DB에서 조회해서 라벨에 세팅
      */
     private void loadAttendanceRate() {
+        // userId가 null인 경우 임시값 사용
+        if (userId == null) {
+            userId = 1L; // 임시값
+        }
+        
         try {
             double rate = attendanceDAO.getAttendanceRate(userId);
             attendanceRateLabel.setText("출결률: " + rate + "%");
@@ -194,6 +258,7 @@ public class AttendanceController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+    
     @FXML
     private void handleApplyBtn() {
         try {
@@ -209,6 +274,4 @@ public class AttendanceController {
             new Alert(Alert.AlertType.ERROR, "신청 창 열기 실패: " + e.getMessage()).showAndWait();
         }
     }
-    
-    
 }

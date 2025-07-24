@@ -9,6 +9,15 @@
       spacing="10">
     <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
 
+    <!-- X 닫기 버튼 -->
+    <HBox>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button fx:id="closeButton"
+                text="X"
+                styleClass="button close-button"
+                onAction="#onCancel"/>
+    </HBox>
+
     <GridPane hgap="8" vgap="8">
         <Label text="제목:"           GridPane.rowIndex="0" GridPane.columnIndex="0"/>
         <TextField fx:id="titleField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
@@ -25,7 +34,7 @@
     </GridPane>
 
     <HBox spacing="8" alignment="CENTER_RIGHT">
-        <Button text="취소" onAction="#onCancel"/>
+       
         <Button text="저장" onAction="#onSave" fx:id="saveBtn"/>
     </HBox>
 </VBox>

@@ -21,8 +21,12 @@
     </TableView>
 
     <HBox spacing="8" alignment="CENTER_RIGHT">
-        <Button text="삭제" onAction="#onDelete" fx:id="deleteBtn"/>
-        <Button text="수정" onAction="#onEdit"   fx:id="editBtn"/>
-        <Button text="닫기" onAction="#onClose"/>
+        <Button fx:id="deleteBtn" text="삭제" onAction="#onDelete"/>
+        <Button fx:id="editBtn"   text="수정" onAction="#onEdit"/>
+        <!-- X 닫기 버튼 (tooltip 제거) -->
+        <Button fx:id="closeBtn"
+                text="X"
+                styleClass="button close-button"
+                onAction="#onClose"/>
     </HBox>
 </VBox>

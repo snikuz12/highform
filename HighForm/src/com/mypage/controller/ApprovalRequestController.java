@@ -1,72 +1,109 @@
 package com.mypage.controller;
 
+import com.login.controller.DesktopController;
+import com.login.model.User;
 import com.mypage.Model.attendance.AttendanceApprovalRequest;
 import com.mypage.dao.attendance.AttendanceApprovalRequestDAO;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.time.LocalDate;
+import java.io.IOException;
 
 public class ApprovalRequestController {
     @FXML private TextArea reasonArea;
     @FXML private TextField fileField;
     @FXML private DatePicker startDatePicker, endDatePicker;
-    @FXML private Button fileBtn;  // ← Browse... 버튼 바인딩
+    @FXML private Button fileBtn;
+    @FXML private Button closeButton;
+
+    private User  currentUser;
+    private Long  userId;
 
     @FXML
     public void initialize() {
-        // "Browse..." 버튼 클릭 시 파일 탐색기 띄우기
-        fileBtn.setOnAction(event -> handleBrowseFile());
+        // 파일 선택 버튼
+        fileBtn.setOnAction(evt -> handleBrowseFile());
     }
 
-    // 파일 탐색기 열기
     private void handleBrowseFile() {
         Window window = fileBtn.getScene().getWindow();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("파일 선택");
-        fileChooser.getExtensionFilters().addAll(
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("파일 선택");
+        chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("모든 파일", "*.*"),
             new FileChooser.ExtensionFilter("이미지 파일", "*.png", "*.jpg", "*.jpeg", "*.gif"),
             new FileChooser.ExtensionFilter("PDF 파일", "*.pdf")
         );
-        java.io.File selectedFile = fileChooser.showOpenDialog(window);
-        if (selectedFile != null) {
-            fileField.setText(selectedFile.getAbsolutePath());
+        java.io.File sel = chooser.showOpenDialog(window);
+        if (sel != null) {
+            fileField.setText(sel.getAbsolutePath());
         }
     }
 
-    // 완료 버튼(신청)
     @FXML
     public void handleSubmit(ActionEvent event) {
         try {
             AttendanceApprovalRequest req = new AttendanceApprovalRequest();
             req.setReason(reasonArea.getText());
             req.setProofFile(fileField.getText());
+            req.setStartDate(startDatePicker.getValue());
+            req.setEndDate(endDatePicker.getValue());
+            req.setUserId(userId);
 
-            // LocalDate 직접 전달
-            LocalDate start = startDatePicker.getValue();
-            LocalDate end = endDatePicker.getValue();
-            req.setStartDate(start);
-            req.setEndDate(end);
-
-            req.setUserId(1L); // 로그인 구현 전이므로 임시값
-
+            // DAO 인스턴스를 new 로 생성하도록 변경
             AttendanceApprovalRequestDAO dao = new AttendanceApprovalRequestDAO();
             dao.insert(req);
 
             new Alert(Alert.AlertType.INFORMATION, "신청 완료!").showAndWait();
-            // 창 닫기, 초기화 등 필요한 후처리
+            // 필요 시 이 창을 닫거나 필드 리셋 로직 추가
+
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "신청 실패: " + e.getMessage()).showAndWait();
         }
+    }
+
+    /**
+     * DesktopController에서 전달된 로그인 사용자 정보 세팅
+     */
+    public void setCurrentUser(User user) {
+        if (user == null) {
+            System.err.println("[ERROR] ApprovalRequestController.setCurrentUser: user가 null입니다.");
+            return;
+        }
+        this.currentUser = user;
+        this.userId      = user.getId();
+        System.out.println("[DEBUG] ApprovalRequestController currentUser 설정: "
+                           + user.getName() + " (ID: " + userId + ")");
+        
+    }
+
+    @FXML
+    private void handleCloseButton() {
+        // 현재 버튼이 속한 윈도우(Stage)를 닫습니다.
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        stage.close();
+    }
+
+
+
+    private void showError(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

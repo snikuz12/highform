@@ -10,8 +10,18 @@
 
     <!-- 타이틀 -->
     <Label layoutX="0" layoutY="0" prefWidth="600" prefHeight="50"
-           style="-fx-background-color: #00007b; -fx-text-fill: white; -fx-font-size: 28px; -fx-alignment: center;"
+           style="-fx-background-color: #00007b;
+                  -fx-text-fill: white;
+                  -fx-font-size: 28px;
+                  -fx-alignment: center;"
            text="과제 제출"/>
+
+    <!-- 닫기 버튼 -->
+    <Button fx:id="closeButton" text="X"
+            layoutX="560" layoutY="10"
+            prefWidth="30" prefHeight="30"
+            styleClass="button close-button"
+            onAction="#handleCloseButton"/>
 
     <Label layoutX="50" layoutY="70" text="커리큘럼/과제 :" prefWidth="110"/>
     <ComboBox fx:id="assignmentCombo" layoutX="170" layoutY="70" prefWidth="350"/>

@@ -1,5 +1,7 @@
 package com.mypage.controller;
 
+import com.login.controller.DesktopController;
+import com.login.model.User;
 import com.mypage.Model.assignment.AssignmentSubmit;
 import com.mypage.dao.assignment.AssignmentSubmitDAO;
 import com.mypage.dao.assignment.CourseAssignmentDTO;
@@ -17,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -32,6 +35,11 @@ public class AssignmentController {
     @FXML private VBox   assignmentListBox;
     @FXML private HBox   paginationBox;
 
+    
+    @FXML
+	private Button closeButton;
+    private User currentUser;
+    
     /* (제출 폼 내부) */
     @FXML private ComboBox<AssignmentOption> assignmentCombo;
     @FXML private TextField titleField;
@@ -50,6 +58,7 @@ public class AssignmentController {
     
 
     private AssignmentSubmitDAO assignmentSubmitDAO;
+	private Long userId;
     /* ================================================================
      *  (A) 초기화  (뷰 로드 직후 자동 호출)
      * ============================================================ */
@@ -65,6 +74,69 @@ public class AssignmentController {
         if (assignmentListBox != null) {
             isCourseListMode = false;
             loadMySubmitList(currentPage);
+        }
+        
+        if (closeButton != null) {
+            closeButton.setOnAction(e -> {
+                Stage stage = (Stage) closeButton.getScene().getWindow();
+                stage.close();
+            });
+        }
+    }
+    
+    public void setCurrentUser(User user) {
+        if (user == null) {
+            System.err.println("[ERROR] AssignmentController.setCurrentUser: user가 null입니다.");
+            return;
+        }
+        this.currentUser  = user;
+        this.loginUserId  = user.getId();
+        System.out.println("[DEBUG] AssignmentController currentUser 설정: "
+                           + user.getName() + " (ID: " + loginUserId + ")");
+
+        // TODO: currentUser 기준으로 과제 목록 재로딩 로직 추가
+        // ------------------------------------
+        // 메인 화면(내 제출 목록) 모드이면 내 제출 리스트,
+        // 등록된 과제 팝업 모드이면 과제 전체 리스트를 다시 불러옵니다.
+        if (isCourseListMode) {
+            // 팝업창에서 호출된 상태라면 과제 전체 리스트
+            loadCourseAssignmentList(currentPage);
+        } else {
+            // 메인 화면 내 제출 목록
+            loadMySubmitList(currentPage);
+        }
+    }
+
+
+    /**
+     * 닫기 버튼 → Desktop.fxml 로 돌아가며 currentUser 유지
+     */
+    @FXML
+    private void handleCloseButton() {
+        try {
+            // ① 현재 Stage 획득
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+
+            // ② Desktop.fxml 로드
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/view/login/Desktop.fxml"));
+            Parent root = loader.load();
+
+            // ③ DesktopController에 currentUser 전달
+            DesktopController desktopCtrl = loader.getController();
+            if (desktopCtrl != null && currentUser != null) {
+                desktopCtrl.setCurrentUser(currentUser);
+                System.out.println("[DEBUG] 데스크탑으로 사용자 정보 전달: " + currentUser.getName());
+            } else {
+                System.err.println("[ERROR] DesktopController 또는 currentUser가 null입니다.");
+            }
+
+            // ④ 씬 교체
+            stage.setScene(new Scene(root));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 간단히 콘솔로 남기거나, 필요시 Alert로 알림
         }
     }
 

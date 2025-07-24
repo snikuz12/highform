@@ -7,16 +7,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane
-    prefHeight="380" prefWidth="440"
-    style="-fx-background-color: #c0c0c0; -fx-border-color: black; -fx-border-width: 3;"
-    xmlns="http://javafx.com/javafx/24.0.1"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.mypage.controller.ApprovalRequestController"
->
+<AnchorPane prefHeight="380" prefWidth="440" style="-fx-background-color: #c0c0c0; -fx-border-color: black; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mypage.controller.ApprovalRequestController">
 
     <!-- 타이틀바 -->
-    <Label layoutX="0" layoutY="0" prefHeight="44" prefWidth="440" style="-fx-background-color: #00007b; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Malgun Gothic', 'Arial'; -fx-font-weight: bold; -fx-alignment: CENTER; -fx-border-color: black; -fx-border-width: 0 0 2 0;" text="출결 병가/공결 신청" />
+    <Label layoutX="5.0" layoutY="6.0" prefHeight="44" prefWidth="440" style="-fx-background-color: #00007b; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Malgun Gothic', 'Arial'; -fx-font-weight: bold; -fx-alignment: CENTER; -fx-border-color: black; -fx-border-width: 0 0 2 0;" text="출결 병가/공결 신청" />
 
     <!-- 사유 -->
     <Label layoutX="50.0" layoutY="78.0" minWidth="80" style="-fx-font-size: 16px;" text="  사유:" />
@@ -36,8 +30,8 @@
     <DatePicker fx:id="endDatePicker" layoutX="108.0" layoutY="263.0" prefWidth="120" />
 
     <!-- 완료 버튼 -->
-    <Button fx:id="submitBtn" layoutX="180" layoutY="310" prefWidth="80"
-        style="-fx-background-color: #e0e0e0; -fx-border-color: black;" text="완료"
-        onAction="#handleSubmit" /> 
+    <Button fx:id="submitBtn" layoutX="180" layoutY="310" onAction="#handleSubmit" prefWidth="80" style="-fx-background-color: #e0e0e0; -fx-border-color: black;" text="완료" /> 
 
+ <!-- 닫기 버튼 -->
+ <Button fx:id="closeButton" layoutX="411.0" layoutY="14.0" onAction="#handleCloseButton" prefHeight="16" prefWidth="16" styleClass="button close-button" text="X" />
 </AnchorPane>
