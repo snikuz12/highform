@@ -5,8 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -14,29 +18,31 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 import com.mypage.Model.Schedule;
 import com.mypage.dao.ScheduleDAO;
 import com.mypage.dao.ScheduleDaoImpl;
+import com.mypage.controller.DailyListController;
+import com.mypage.controller.ScheduleDialogController;
 
 public class CalendarController implements Initializable {
 
-    /* ========== FXML ========== */
-    @FXML private Label  monthLabel;
-    @FXML private Button prevBtn, nextBtn, addBtn, editBtn;
+    /* ========== FXML 필드 ========== */
+    @FXML private Label   monthLabel;
+    @FXML private Button  prevBtn, nextBtn, addBtn, editBtn;
     @FXML private GridPane calendarGrid;
 
-    /* ========== 상태 ========== */
-    private YearMonth   currentYm;
-    private final long  loginUserId;
+    /* ========== 내부 상태 ========== */
+    private YearMonth        currentYm;
+    private final long       loginUserId;
     private final ScheduleDAO scheduleDAO;
-    private final LocalDate today = LocalDate.now();
+    private final LocalDate   today = LocalDate.now();
 
     /* ========== 생성자 ========== */
     public CalendarController(Long loginUserId) {
@@ -44,65 +50,82 @@ public class CalendarController implements Initializable {
         this.scheduleDAO = new ScheduleDaoImpl();
         this.currentYm   = YearMonth.now();
     }
-
-    /* FX 로더용 no‑arg 생성자 (필요시) */
+    /** FX용 no‑arg 생성자 */
     public CalendarController() {
-        this(1L);  // 예시로 1L
+        this(1L);
     }
 
-    /* ========== 초기화 ========== */
+    /* ========== 초기화 콜백 ========== */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // 그리드가 VBox 남은 공간을 모두 차지하도록 설정
+        VBox.setVgrow(calendarGrid, Priority.ALWAYS);
+        calendarGrid.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        // 버튼 이벤트 바인딩
         prevBtn.setOnAction(e -> moveMonth(-1));
         nextBtn.setOnAction(e -> moveMonth(+1));
         addBtn .setOnAction(e -> openAddDialog());
         editBtn.setOnAction(e -> openDailyView(LocalDate.now()));
+
+        // 최초 달력 그리기
         drawCalendar();
     }
 
-    /* ========== 달 이동 ========== */
+    /* ========== 월 이동 ========== */
     private void moveMonth(int offset) {
         currentYm = currentYm.plusMonths(offset);
         drawCalendar();
     }
 
-    /* ========== 달력 그리기 ========== */
+    /* ========== 달력 렌더링 ========== */
     private void drawCalendar() {
+        // 기존 컨텐츠 초기화
         calendarGrid.getChildren().clear();
 
-        monthLabel.setText(currentYm.getYear() + " - " +
-            currentYm.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()));
+        // 1) 요일 헤더 (0행)
+        String[] days = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+        for (int col = 0; col < 7; col++) {
+            Label hdr = new Label(days[col]);
+            hdr.getStyleClass().add("month-label");
+            StackPane cell = new StackPane(hdr);
+            cell.getStyleClass().add("header-cell");
+            calendarGrid.add(cell, col, 0);
+        }
 
-        // 요일 헤더 생략...
+        // 2) 상단 월 레이블 갱신
+        monthLabel.setText(
+            currentYm.getYear() + " - " +
+            currentYm.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())
+        );
 
+        // 3) DB에서 일정 불러오기
         List<Schedule> events = fetchSchedules();
 
-        LocalDate first = currentYm.atDay(1);
-        int offset = first.getDayOfWeek().getValue() % 7;  // 일=0
-        LocalDate cursor = first.minusDays(offset);
+        // 4) 첫 날짜(1일 이전 주 일요일) 계산
+        LocalDate firstOfMonth = currentYm.atDay(1);
+        int offset = firstOfMonth.getDayOfWeek().getValue() % 7;  // 일=0
+        LocalDate cursor = firstOfMonth.minusDays(offset);
 
-        for (int cell = 0; cell < 42; cell++, cursor = cursor.plusDays(1)) {
-            // **이 부분이 핵심**: 반복마다 'date'라는 final 변수에 할당
+        // 5) 날짜 셀(1~6행, 6주×7일)
+        for (int i = 0; i < 42; i++, cursor = cursor.plusDays(1)) {
             final LocalDate date = cursor;
+            int col = i % 7;
+            int row = i / 7 + 1;
 
-            int col = cell % 7, row = cell / 7 + 1;
             StackPane stack = new StackPane();
             stack.getStyleClass().add("day-cell");
-
-            VBox box = new VBox();
-            if (date.getMonth().equals(currentYm.getMonth())) {
-                box.getStyleClass().add("current-month");
-            } else {
-                box.getStyleClass().add("other-month");
+            if (!date.getMonth().equals(currentYm.getMonth())) {
+                stack.getStyleClass().add("other-month");
             }
             if (date.equals(today)) {
-                box.getStyleClass().add("today");
+                stack.getStyleClass().add("today");
             }
 
+            VBox box = new VBox();
             Label dayNum = new Label(String.valueOf(date.getDayOfMonth()));
             box.getChildren().add(dayNum);
 
-            // 이제 이 람다 안에서 date 를 안전하게 캡처할 수 있습니다.
             events.stream()
                   .filter(s -> s.contains(date))
                   .forEach(s -> {
@@ -117,8 +140,7 @@ public class CalendarController implements Initializable {
         }
     }
 
-
-    /* ========== DB 조회 ========== */
+    /* ========== DB에서 일정 가져오기 ========== */
     private List<Schedule> fetchSchedules() {
         try {
             return scheduleDAO.findByUserAndMonth(loginUserId, currentYm);
@@ -128,7 +150,7 @@ public class CalendarController implements Initializable {
         }
     }
 
-    /* ========== 일간 뷰 열기 ========== */
+    /* ========== 일간 뷰 팝업 열기 ========== */
     private void openDailyView(LocalDate date) {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -136,7 +158,7 @@ public class CalendarController implements Initializable {
             Parent root = loader.load();
 
             DailyListController ctrl = loader.getController();
-            ctrl.init(date, loginUserId, scheduleDAO, () -> drawCalendar());
+            ctrl.init(date, loginUserId, scheduleDAO, this::drawCalendar);
 
             Stage dlg = new Stage();
             dlg.initOwner(calendarGrid.getScene().getWindow());
@@ -146,12 +168,13 @@ public class CalendarController implements Initializable {
             dlg.showAndWait();
         } catch (Exception ex) {
             ex.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "목록 표시 오류:\n" + ex.getMessage())
-                .showAndWait();
+            new Alert(Alert.AlertType.ERROR,
+                      "목록 표시 오류:\n" + ex.getMessage(),
+                      ButtonType.OK).showAndWait();
         }
     }
 
-    /* ========== 새 일정 다이얼로그 열기 ========== */
+    /* ========== 새 일정 팝업 열기 ========== */
     private void openAddDialog() {
         try {
             FXMLLoader loader = new FXMLLoader(

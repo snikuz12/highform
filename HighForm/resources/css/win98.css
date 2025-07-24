@@ -99,3 +99,31 @@
     -fx-border-color: #808080 #FFFFFF #FFFFFF #808080;
     -fx-border-width: 1;
 }
+
+.day-cell.other-month {
+    -fx-opacity: 0.5;
+}
+.day-cell.other-month .label {
+    -fx-text-fill: #7F7F7F;
+}
+
+.day-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #808080 #FFFFFF #FFFFFF #808080;
+    -fx-border-width: 1;
+    -fx-alignment: top-left;
+    -fx-padding: 3;
+}
+/* hover 효과는 day-cell 에만 */
+.day-cell:hover {
+    -fx-background-color: #E0E0E0;
+}
+
+/* --- 헤더 전용 스타일 --- */
+.header-cell {
+    -fx-background-color: #F0F0F0;  /* 살짝 짙은 흰색 */
+    -fx-border-color: #808080 #FFFFFF #FFFFFF #808080;
+    -fx-border-width: 1;
+    -fx-alignment: center;
+    -fx-padding: 3;
+}

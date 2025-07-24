@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>            <!-- 이 줄 추가 -->
+<?import java.lang.String?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
@@ -13,23 +15,62 @@
       fx:controller="com.mypage.controller.CalendarController"
       spacing="4">
 
+    <!-- Windows 98 스타일 시트 -->
     <stylesheets>
-        <!-- String 타입임을 선언했으니 이제 동작합니다 -->
         <String fx:value="@../../css/win98.css"/>
     </stylesheets>
 
+    <!-- 전체 패딩 -->
     <padding>
         <Insets top="8" right="8" bottom="8" left="8"/>
     </padding>
 
+    <!-- 상단 네비게이션 바 -->
     <HBox spacing="4">
-        <Button fx:id="prevBtn" text="◀"/>
-        <Label  fx:id="monthLabel"/>
-        <Button fx:id="nextBtn" text="▶"/>
-        <Pane HBox.hgrow="ALWAYS"/>
-        <Button fx:id="addBtn" text="추가"/>
+        <!-- 좌측 빈 공간을 채워 ◀ 월 ▶ 을 가운데 배치 -->
+        <HBox spacing="4" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+            <Button fx:id="prevBtn" text="◀" style="-fx-font-size:24px;"/>
+            <Label  fx:id="monthLabel" style="-fx-font-size:24px;" styleClass="month-label"/>
+            <Button fx:id="nextBtn" text="▶" style="-fx-font-size:24px;"/>
+        </HBox>
+        <!-- 우측 버튼 -->
+        <Button fx:id="addBtn"  text="추가"/>
         <Button fx:id="editBtn" text="수정"/>
     </HBox>
 
-    <GridPane fx:id="calendarGrid"/>
+    <!-- 달력 그리드: 요일 헤더(1행) + 날짜 칸(6주×7열) -->
+    <GridPane fx:id="calendarGrid"
+              VBox.vgrow="ALWAYS"
+              maxWidth="Infinity"
+              maxHeight="Infinity"
+              hgap="1"
+              vgap="1">
+
+        <!-- 7열 균등 분할 -->
+        <columnConstraints>
+            <ColumnConstraints percentWidth="14.2857"/>
+            <ColumnConstraints percentWidth="14.2857"/>
+            <ColumnConstraints percentWidth="14.2857"/>
+            <ColumnConstraints percentWidth="14.2857"/>
+            <ColumnConstraints percentWidth="14.2857"/>
+            <ColumnConstraints percentWidth="14.2857"/>
+            <ColumnConstraints percentWidth="14.2857"/>
+        </columnConstraints>
+
+        <!--
+          7행 분할:
+          - 0행: 요일 헤더 (고정 높이 30px)
+          - 1~6행: 날짜 칸 (남은 높이를 6등분)
+        -->
+        <rowConstraints>
+            <RowConstraints minHeight="30" maxHeight="30" vgrow="NEVER"/>
+            <RowConstraints percentHeight="16.6667"/>
+            <RowConstraints percentHeight="16.6667"/>
+            <RowConstraints percentHeight="16.6667"/>
+            <RowConstraints percentHeight="16.6667"/>
+            <RowConstraints percentHeight="16.6667"/>
+            <RowConstraints percentHeight="16.6667"/>
+        </rowConstraints>
+
+    </GridPane>
 </VBox>
