@@ -65,6 +65,7 @@ public class ApprovalRequestController {
             new Alert(Alert.AlertType.INFORMATION, "신청 완료!").showAndWait();
             // 창 닫기, 초기화 등 필요한 후처리
         } catch (Exception e) {
+        	e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "신청 실패: " + e.getMessage()).showAndWait();
         }
     }

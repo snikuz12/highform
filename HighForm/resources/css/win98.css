@@ -1,0 +1,101 @@
+/* win98.css – Windows 98 느낌의 테마 */
+
+/* 1) 전역(윈도우 98 기본 회색 + MS Sans Serif) */
+.root {
+    -fx-font-family: "MS Sans Serif", "System";
+    -fx-font-size: 12px;
+    -fx-background-color: #C0C0C0; /* 기본 회색 */
+}
+
+/* 2) 컨테이너 내부 흰색 배경 */
+.table-view,
+.scroll-pane,
+.text-area,
+.text-field,
+.date-picker > .arrow-button,
+.combo-box,
+.choice-box {
+    -fx-background-color: #FFFFFF;
+}
+
+/* 3) 3‑D 버튼 효과 */
+.button {
+    -fx-background-color:
+        linear-gradient(
+            from 0% 0% to 0% 100%,
+            #FFFFFF 0%,
+            #C0C0C0 40%,
+            #C0C0C0 60%,
+            #808080 100%
+        );
+    -fx-border-color: #FFFFFF #808080 #808080 #FFFFFF; /* 상 우 하 좌 */
+    -fx-border-width: 1;
+    -fx-padding: 3 8 3 8;
+}
+.button:pressed {
+    -fx-background-color:
+        linear-gradient(
+            from 0% 0% to 0% 100%,
+            #808080 0%,
+            #C0C0C0 100%
+        );
+    -fx-border-color: #808080 #FFFFFF #FFFFFF #808080;
+}
+
+/* 4) 선택 셀(테이블, 리스트 등) */
+.table-row-cell:filled:selected,
+.table-view:focused .table-row-cell:filled:selected {
+    -fx-background-color: #000080;     /* 딥블루 */
+    -fx-text-fill: #FFFFFF;
+}
+
+/* 5) 달력 셀 */
+.day-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #808080 #FFFFFF #FFFFFF #808080; /* 상 우 하 좌 */
+    -fx-border-width: 1;
+    -fx-alignment: top-left;
+    -fx-padding: 3;
+}
+.day-cell:hover {
+    -fx-background-color: #E0E0E0;
+}
+.other-month {
+    -fx-text-fill: #7F7F7F;
+}
+.month-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+    -fx-padding: 4 0 4 4;
+}
+
+/* 오늘 날짜 강조 */
+.day-cell.today {
+    -fx-border-color: #0000FF;  /* 파란색 테두리 */
+    -fx-border-width: 2;
+}
+
+/* 6) 포커스 점선 (키보드 포커스) */
+.button:focused,
+.day-cell:focused,
+.text-field:focused,
+.text-area:focused,
+.date-picker:focused {
+    -fx-border-style: segments(1.0, 2.0) none segments(1.0, 2.0) none;
+    -fx-border-width: 1;
+    -fx-border-color: #000000;
+}
+
+/* 7) 스크롤바 3‑D 느낌 (옵션) */
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color:
+        linear-gradient(
+            from 0% 0% to 0% 100%,
+            #E0E0E0 0%,
+            #C0C0C0 100%
+        );
+    -fx-border-color: #808080 #FFFFFF #FFFFFF #808080;
+    -fx-border-width: 1;
+}
