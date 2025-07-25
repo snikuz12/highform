@@ -22,24 +22,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * AssignmentController
- *  ─ 메인 화면  : 내 제출 목록 + (과제 제출 버튼)
- *  ─ 팝업 창    : 등록된 과제(수강 중 전체) + 제출 여부 목록
- */
 public class AssignmentController {
 
-    /* ───────────────── FXML 주입 컴포넌트 ───────────────── */
     @FXML private Button submitBtn;  // 메인: 과제 제출 모달
     @FXML private Button listBtn;    // 메인: 등록된 과제 팝업
     @FXML private VBox   assignmentListBox;
     @FXML private HBox   paginationBox;
 
-    
     @FXML
-	private Button closeButton;
+    private Button closeButton;
     private User currentUser;
-    
+
     /* (제출 폼 내부) */
     @FXML private ComboBox<AssignmentOption> assignmentCombo;
     @FXML private TextField titleField;
@@ -48,34 +41,20 @@ public class AssignmentController {
     @FXML private Button    browseBtn;
     @FXML private Button    submitBtn_form;
 
-    
-    /* ───────── 상태 필드 ───────── */
-    private int  currentPage   = 1;
-    private int  pageSize      = 10;
-    private long loginUserId   = 3L;   // 실제 로그인 사용자 ID 주입 필요
-    private boolean isCourseListMode   = false;
-    private File attachedFile;  
-    
+    private int currentPage = 1;
+    private int pageSize = 10;
+    private Long loginUserId = null;     // ← user.getId()로 관리 (Long 타입)
+    private boolean isCourseListMode = false;
+    private File attachedFile;
 
-    private AssignmentSubmitDAO assignmentSubmitDAO;
-	private Long userId;
-    /* ================================================================
-     *  (A) 초기화  (뷰 로드 직후 자동 호출)
-     * ============================================================ */
     @FXML
     public void initialize() {
-        /* 제출 모달 */
         if (submitBtn != null) submitBtn.setOnAction(e -> openSubmitForm());
-
-        /* ★ 변경 1 : listBtn => 별도 팝업 Stage 로드 */
         if (listBtn != null) listBtn.setOnAction(e -> openRegisteredListWindow());
-
-        /* 메인 화면 첫 진입 : 내 제출 목록 */
         if (assignmentListBox != null) {
             isCourseListMode = false;
             loadMySubmitList(currentPage);
         }
-        
         if (closeButton != null) {
             closeButton.setOnAction(e -> {
                 Stage stage = (Stage) closeButton.getScene().getWindow();
@@ -83,30 +62,25 @@ public class AssignmentController {
             });
         }
     }
-    
+
+    /** 로그인 후 사용자 객체를 주입받아 세팅 */
     public void setCurrentUser(User user) {
         if (user == null) {
             System.err.println("[ERROR] AssignmentController.setCurrentUser: user가 null입니다.");
             return;
         }
-        this.currentUser  = user;
-        this.loginUserId  = user.getId();
+        this.currentUser = user;
+        this.loginUserId = user.getId();  // 핵심: Long 타입의 PK로!
         System.out.println("[DEBUG] AssignmentController currentUser 설정: "
-                           + user.getName() + " (ID: " + loginUserId + ")");
+                + user.getName() + " (id: " + loginUserId + ")");
 
-        // TODO: currentUser 기준으로 과제 목록 재로딩 로직 추가
-        // ------------------------------------
-        // 메인 화면(내 제출 목록) 모드이면 내 제출 리스트,
-        // 등록된 과제 팝업 모드이면 과제 전체 리스트를 다시 불러옵니다.
+        // currentUser 기준으로 과제 목록 재로딩
         if (isCourseListMode) {
-            // 팝업창에서 호출된 상태라면 과제 전체 리스트
             loadCourseAssignmentList(currentPage);
         } else {
-            // 메인 화면 내 제출 목록
             loadMySubmitList(currentPage);
         }
     }
-
 
     /**
      * 닫기 버튼 → Desktop.fxml 로 돌아가며 currentUser 유지
@@ -114,15 +88,12 @@ public class AssignmentController {
     @FXML
     private void handleCloseButton() {
         try {
-            // ① 현재 Stage 획득
             Stage stage = (Stage) closeButton.getScene().getWindow();
 
-            // ② Desktop.fxml 로드
             FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/view/login/Desktop.fxml"));
             Parent root = loader.load();
 
-            // ③ DesktopController에 currentUser 전달
             DesktopController desktopCtrl = loader.getController();
             if (desktopCtrl != null && currentUser != null) {
                 desktopCtrl.setCurrentUser(currentUser);
@@ -131,38 +102,31 @@ public class AssignmentController {
                 System.err.println("[ERROR] DesktopController 또는 currentUser가 null입니다.");
             }
 
-            // ④ 씬 교체
             stage.setScene(new Scene(root));
-
         } catch (IOException e) {
             e.printStackTrace();
-            // 간단히 콘솔로 남기거나, 필요시 Alert로 알림
         }
     }
 
-    /* ================================================================
-     *  (B) 메인 화면 ① : 내 제출 목록
-     * ============================================================ */
+    // ======= 내 제출 목록 불러오기 =======
     private void loadMySubmitList(int page) {
         try {
             clearListBoxExceptHeader();
             int offset = (page - 1) * pageSize;
 
             List<AssignmentSubmit> submitList =
-                    AssignmentSubmitDAO.getInstance().getSubmitList(loginUserId, offset, pageSize);
+                AssignmentSubmitDAO.getInstance().getSubmitList(loginUserId, offset, pageSize);
 
             int no = offset + 1;
             for (AssignmentSubmit sub : submitList) {
-            
                 HBox row = new HBox();
                 row.setStyle("-fx-border-color:black; -fx-border-width:0 0 1 0; -fx-alignment:center;");
-
                 row.getChildren().addAll(
-                	    createTableCell(String.valueOf(no++), 60, false),          // No
-                	    createTableCell(sub.getAssignmentTitle(), 140, false),     // 과제명
-                	    createTableCell(sub.getSubmitTitle(), 220, false),         // 제출 제목
-                	    createTableCell(sub.getContent(), 360, false),             // 내용
-                	    createTableCell(formatDate(sub.getSubmittedAt()), 160, true) // 제출일
+                        createTableCell(String.valueOf(no++), 60, false),          // No
+                        createTableCell(sub.getAssignmentTitle(), 140, false),     // 과제명
+                        createTableCell(sub.getSubmitTitle(), 220, false),         // 제출 제목
+                        createTableCell(sub.getContent(), 360, false),             // 내용
+                        createTableCell(formatDate(sub.getSubmittedAt()), 160, true)
                 );
                 assignmentListBox.getChildren().add(row);
             }
@@ -172,51 +136,42 @@ public class AssignmentController {
         }
     }
 
-
-    /* ================================================================
-     *  (C) 팝업 화면 ② : 수강중 과제 + 제출 여부 (LEFT JOIN)
-     *      ─ 이 메서드는 팝업에서만 호출
-     * ============================================================ */
+    // ======= 등록된 과제 전체 + 제출여부 =======
     private void loadCourseAssignmentList(int page) {
         try {
             clearListBoxExceptHeader();
             int offset = (page - 1) * pageSize;
 
             List<CourseAssignmentDTO> list =
-                    AssignmentSubmitDAO.getInstance()
-                                       .getCourseAssignmentsWithStatus(loginUserId, offset, pageSize);
+                AssignmentSubmitDAO.getInstance()
+                        .getCourseAssignmentsWithStatus(loginUserId, offset, pageSize);
 
             int no = offset + 1;
             for (CourseAssignmentDTO dto : list) {
                 HBox row = new HBox();
                 row.setStyle("-fx-border-color:black; -fx-border-width:0 0 1 0; -fx-alignment:center;");
                 row.getChildren().addAll(
-                	    createTableCell(String.valueOf(no++), 60, false),
-                	    createTableCell(dto.getAssignmentTitle(), 300, false),
-                	    createTableCell(dto.isSubmitted() ? "제출" : "미제출", 120, false),
-                	    createTableCell(formatDate(dto.getEndDate()), 200, true)   // ← 마지막 셀
-                	);
-
+                        createTableCell(String.valueOf(no++), 60, false),
+                        createTableCell(dto.getAssignmentTitle(), 300, false),
+                        createTableCell(dto.isSubmitted() ? "제출" : "미제출", 120, false),
+                        createTableCell(formatDate(dto.getEndDate()), 200, true)
+                );
                 assignmentListBox.getChildren().add(row);
             }
-
             showPagination(page);
         } catch (Exception ex) { ex.printStackTrace(); }
     }
 
-    /* ================================================================
-     *  (D) 등록된 과제 팝업 Stage 오픈
-     * ============================================================ */
+    // ======= 등록된 과제 팝업 오픈 =======
     private void openRegisteredListWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/view/mypage/assignment/RegisteredAssignmentList.fxml")); // ★ 팝업용 FXML 경로
+                    getClass().getResource("/view/mypage/assignment/RegisteredAssignmentList.fxml"));
             Parent root = loader.load();
 
-            /* 팝업 컨트롤러에 사용자 ID·모드 전달 */
             AssignmentController popupCtrl = loader.getController();
             popupCtrl.setLoginUserId(loginUserId);
-            popupCtrl.initAsCourseList();           // 과제 전체 모드로 초기화
+            popupCtrl.initAsCourseList();
 
             Stage st = new Stage();
             st.setTitle("등록된 과제");
@@ -227,42 +182,33 @@ public class AssignmentController {
         } catch (Exception ex) { ex.printStackTrace(); }
     }
 
-    /* ================================================================
-     *  (E) 외부에서 모드·사용자 ID 세팅할 때 쓸 public 메서드
-     * ============================================================ */
-    public void setLoginUserId(long userId) { this.loginUserId = userId; }
-
-    /** 팝업에서 호출: 수강중 과제 모드로 전환 후 첫 페이지 로드 */
+    public void setLoginUserId(Long loginUserId) {   // PK(Long)로 세팅
+        this.loginUserId = loginUserId;
+    }
     public void initAsCourseList() {
-        if (assignmentListBox == null) return; // FXML 주입 완료 전일 수 있음
+        if (assignmentListBox == null) return;
         isCourseListMode = true;
         loadCourseAssignmentList(1);
     }
 
-    /* ================================================================
-     *  (F) 공통 유틸
-     * ============================================================ */
     private void clearListBoxExceptHeader() {
         if (assignmentListBox.getChildren().size() > 1)
             assignmentListBox.getChildren().remove(1, assignmentListBox.getChildren().size());
     }
-
     private Label createTableCell(String text, double width, boolean last) {
         Label lbl = new Label(text == null ? "" : text);
         lbl.setMinWidth(width);
         lbl.setPrefWidth(width);
         lbl.setMaxWidth(width);
         lbl.setStyle("-fx-font-size:16px; -fx-alignment:center;" +
-                     "-fx-border-color:black;" +
-                     (last ? "-fx-border-width:0;" : "-fx-border-width:0 1 0 0;"));
+                "-fx-border-color:black;" +
+                (last ? "-fx-border-width:0;" : "-fx-border-width:0 1 0 0;"));
         return lbl;
     }
-
     private String formatDate(java.time.LocalDateTime dt) {
         return dt == null ? "" : dt.toString().replace('T', ' ');
     }
 
-    /* -------- 페이지네이션 -------- */
     private void showPagination(int selectedPage) {
         paginationBox.getChildren().clear();
         int total = 0;
@@ -278,21 +224,17 @@ public class AssignmentController {
             btn.setStyle("-fx-font-size:16px;");
             if (i == selectedPage)
                 btn.setStyle("-fx-font-size:16px; -fx-font-weight:bold; "
-                           + "-fx-background-color:#00007b; -fx-text-fill:white;");
+                        + "-fx-background-color:#00007b; -fx-text-fill:white;");
 
             int pageNum = i;
             btn.setOnAction(e -> {
                 if (isCourseListMode) loadCourseAssignmentList(pageNum);
-                else                  loadMySubmitList(pageNum);
+                else loadMySubmitList(pageNum);
             });
             paginationBox.getChildren().add(btn);
         }
     }
 
-    /* ================================================================
-     *  (G) 과제 제출 모달 (메인 화면)
-     * ============================================================ */
-    
     private void openSubmitForm() {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -305,28 +247,22 @@ public class AssignmentController {
             TextField  fileTF   = (TextField) root.lookup("#fileField");
             Button     browseB  = (Button)    root.lookup("#browseBtn");
             Button     submitB  = (Button)    root.lookup("#submitBtn");
-            
 
-            /* ▼ 1. 과제 선택 콤보 초기화 */
             if (combo != null) {
                 combo.getItems().setAll(
-                    AssignmentSubmitDAO.getInstance().getAvailableAssignmentsForUser(loginUserId));
+                        AssignmentSubmitDAO.getInstance().getAvailableAssignmentsForUser(loginUserId));
                 combo.setPromptText("과제 선택");
             }
-
-            /* ▼ 2. 파일 선택 */
             if (browseB != null && fileTF != null) {
                 browseB.setOnAction(e -> {
                     FileChooser fc = new FileChooser();
                     File f = fc.showOpenDialog(null);
                     if (f != null) {
                         fileTF.setText(f.getName());
-                        attachedFile = f;            // 선택된 파일 보관
+                        attachedFile = f;
                     }
                 });
             }
-
-            /* ▼ 3. 제출 버튼 */
             if (submitB != null) submitB.setOnAction(e -> {
                 AssignmentOption sel = combo.getValue();
                 String title   = titleTF.getText();
@@ -343,17 +279,14 @@ public class AssignmentController {
                 sub.setSubmittedAt(java.time.LocalDateTime.now());
 
                 try {
-                    /* ★ 파일 포함 INSERT */
                     AssignmentSubmitDAO.getInstance()
-                                       .insertWithFile(sub, attachedFile);
+                            .insertWithFile(sub, attachedFile);
                     msg("제출 완료!");
                     submitB.getScene().getWindow().hide();
-
-                    /* 제출 후 메인 화면 새로고침 */
                     isCourseListMode = false;
                     loadMySubmitList(currentPage);
                 } catch (Exception ex) {
-                	ex.printStackTrace(); 
+                    ex.printStackTrace();
                     msg("제출 실패: " + ex.getMessage(), Alert.AlertType.ERROR);
                 }
             });
@@ -368,15 +301,10 @@ public class AssignmentController {
         } catch (Exception ex) { ex.printStackTrace(); }
     }
 
-
     private void msg(String txt) {
         msg(txt, Alert.AlertType.INFORMATION);
     }
-
-    /** 타입 지정 알림 */
     private void msg(String txt, Alert.AlertType tp) {
         new Alert(tp, txt).showAndWait();
     }
-    
-
 }

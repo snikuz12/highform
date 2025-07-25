@@ -9,7 +9,9 @@ import com.util.DBConnection;
 
 public class AttendanceApprovalRequestDAO {
     public void insert(AttendanceApprovalRequest req) throws SQLException {
-        // 1) id 컬럼에 시퀀스를 직접 호출하도록 SQL 수정
+        // status 값은 필요시 상수로 관리
+        final String STATUS_PROGRESSING = "progressing";
+        
         String sql = "INSERT INTO attendance_approval_request "
             + "(id, reason, proof_file, status, requested_at, start_date, end_date, user_id) "
             + "VALUES (SEQ_ATT_APP_REQ.NEXTVAL, ?, ?, ?, SYSDATE, ?, ?, ?)";
@@ -17,10 +19,9 @@ public class AttendanceApprovalRequestDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
              
-            // 2) 파라미터 인덱스 변경: ? 순서에 맞게 세팅
             pstmt.setString(1, req.getReason());
-            pstmt.setString(2, req.getProofFile());
-            pstmt.setString(3, "progressing");  // 신청 시 고정
+            pstmt.setString(2, req.getProofFile());   // null 허용 컬럼 확인 필요
+            pstmt.setString(3, STATUS_PROGRESSING);
             pstmt.setDate(4, java.sql.Date.valueOf(req.getStartDate()));
             pstmt.setDate(5, java.sql.Date.valueOf(req.getEndDate()));
             pstmt.setLong(6, req.getUserId());
