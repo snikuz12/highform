@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.login.controller.DesktopController" 
+           style="-fx-background-color: #008080;" prefWidth="1000" prefHeight="750">
+    
+    <center>
+        <AnchorPane fx:id="desktopPane">
+            <VBox layoutX="20" layoutY="20" spacing="15" alignment="TOP_LEFT">
+                <!-- 출석체크 -->
+                <VBox alignment="CENTER" spacing="8" onMouseClicked="#openAttendanceCheck"
+                      style="-fx-cursor: hand;" maxWidth="80" minWidth="80">
+                    <ImageView fitWidth="64" fitHeight="64">
+                        <image>
+                            <Image url="@../../img2/attendance_icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="출석체크" 
+                           style="-fx-text-fill: white; -fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 12px; -fx-background-color: rgba(0,0,0,0); -fx-padding: 2 4 2 4; -fx-background-radius: 3;"
+                           wrapText="true" textAlignment="CENTER"/>
+                </VBox>
+                
+                <!-- 파일 관리자 -->
+                <VBox alignment="CENTER" spacing="8" onMouseClicked="#openFileManager"
+                      style="-fx-cursor: hand;" maxWidth="80" minWidth="80">
+                    <ImageView fitWidth="64" fitHeight="64">
+                        <image>
+                            <Image url="@../../img2/folder_icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="폴더" 
+                           style="-fx-text-fill: white; -fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 12px; -fx-background-color: rgba(0,0,0,0); -fx-padding: 2 4 2 4; -fx-background-radius: 3;"
+                           wrapText="true" textAlignment="CENTER"/>
+                </VBox>
+                
+                <!-- 휴지통 -->
+                <VBox alignment="CENTER" spacing="8" onMouseClicked="#openTrash"
+                      style="-fx-cursor: hand;" maxWidth="80" minWidth="80">
+                    <ImageView fitWidth="64" fitHeight="64">
+                        <image>
+                            <Image url="@../../img2/trash_icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="휴지통" 
+                           style="-fx-text-fill: white; -fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 12px; -fx-background-color: rgba(0,0,0,0); -fx-padding: 2 4 2 4; -fx-background-radius: 3;"
+                           wrapText="true" textAlignment="CENTER"/>
+                </VBox>
+                
+                <!-- 알림판 -->
+                <VBox alignment="CENTER" spacing="8" onMouseClicked="#openBoard"
+                      style="-fx-cursor: hand;" maxWidth="80" minWidth="80">
+                    <ImageView fitWidth="64" fitHeight="64">
+                        <image>
+                            <Image url="@../../img2/board_icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="알림판" 
+                           style="-fx-text-fill: white; -fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 12px; -fx-background-color: rgba(0,0,0,0); -fx-padding: 2 4 2 4; -fx-background-radius: 3;"
+                           wrapText="true" textAlignment="CENTER"/>
+                </VBox>
+                
+                <!-- 공지사항 -->
+                <VBox alignment="CENTER" spacing="8" onMouseClicked="#openNotice"
+                      style="-fx-cursor: hand;" maxWidth="80" minWidth="80">
+                    <ImageView fitWidth="64" fitHeight="64">
+                        <image>
+                            <Image url="@../../img2/notice_icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="공지사항" 
+                           style="-fx-text-fill: white; -fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 12px; -fx-background-color: rgba(0,0,0,0); -fx-padding: 2 4 2 4; -fx-background-radius: 3;"
+                           wrapText="true" textAlignment="CENTER"/>
+                </VBox>
+                
+                <!-- 휴가신청서 -->
+                <VBox alignment="CENTER" spacing="8" onMouseClicked="#openVacationRequest"
+                      style="-fx-cursor: hand;" maxWidth="80" minWidth="80">
+                    <ImageView fitWidth="64" fitHeight="64">
+                        <image>
+                            <Image url="@../../img2/vacation_icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="휴가신청" 
+                           style="-fx-text-fill: white; -fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 12px; -fx-background-color: rgba(0,0,0,0); -fx-padding: 2 4 2 4; -fx-background-radius: 3;"
+                           wrapText="true" textAlignment="CENTER"/>
+                </VBox>
+            </VBox>
+            
+            <VBox layoutX="120" layoutY="20" spacing="15" alignment="TOP_LEFT">
+                <!-- 퇴근하기 -->
+                <VBox alignment="CENTER" spacing="8" onMouseClicked="#openClockOut"
+                      style="-fx-cursor: hand;" maxWidth="80" minWidth="80">
+                    <ImageView fitWidth="64" fitHeight="64">
+                        <image>
+                            <Image url="@../../img2/clockout_icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="퇴근하기" 
+                           style="-fx-text-fill: white; -fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 12px; -fx-background-color: rgba(0,0,0,0); -fx-padding: 2 4 2 4; -fx-background-radius: 3;"
+                           wrapText="true" textAlignment="CENTER"/>
+                </VBox>
+                
+                <!-- 계산기 -->
+                <VBox alignment="CENTER" spacing="8" onMouseClicked="#openCalculator"
+                      style="-fx-cursor: hand;" maxWidth="80" minWidth="80">
+                    <ImageView fitWidth="64" fitHeight="64">
+                        <image>
+                            <Image url="@../../img2/calculator_icon.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="계산기" 
+                           style="-fx-text-fill: white; -fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 12px; -fx-background-color: rgba(0,0,0,0); -fx-padding: 2 4 2 4; -fx-background-radius: 3;"
+                           wrapText="true" textAlignment="CENTER"/>
+                </VBox>
+            </VBox>
+            
+            <!-- 사용자 정보 표시 -->
+            <HBox layoutX="650" layoutY="20" spacing="10" alignment="CENTER_RIGHT">
+                <Label fx:id="welcomeLabel" text="환영합니다, 사용자님!" 
+                       style="-fx-text-fill: white; -fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 14px; -fx-background-color: rgba(0,0,0,0.2); -fx-padding: 8 12 8 12; -fx-background-radius: 4;"/>
+            </HBox>
+        </AnchorPane>
+    </center>
+    
+    <bottom>
+        <HBox style="-fx-background-color: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%); -fx-border-color: #808080; -fx-border-width: 2 0 0 0; -fx-padding: 6;"
+              prefHeight="45" alignment="CENTER_LEFT" spacing="8">
+            <Button text="시작" fx:id="startButton" onAction="#showStartMenu"
+                    style="-fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 14px; -fx-background-color: linear-gradient(to bottom, #d0d0d0 0%, #b0b0b0 100%); -fx-border-color: #808080; -fx-border-width: 2; -fx-padding: 6 20 6 20; -fx-background-radius: 2;"
+                    prefHeight="35" minWidth="80"/>
+            <Separator orientation="VERTICAL" prefHeight="30"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="timeLabel" text="3:43 pm" 
+                   style="-fx-font-family: url('./resources/fonts/DungGeunMo.ttf'); -fx-font-size: 14px; -fx-text-fill: black; -fx-background-color: rgba(255,255,255,0.3); -fx-padding: 4 8 4 8; -fx-background-radius: 2;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

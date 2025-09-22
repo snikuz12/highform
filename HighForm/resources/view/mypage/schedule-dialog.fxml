@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mypage.controller.ScheduleDialogController"
+      spacing="10">
+    <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
+
+    <!-- X 닫기 버튼 -->
+    <HBox>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button fx:id="closeButton"
+                text="X"
+                styleClass="button close-button"
+                onAction="#onCancel"/>
+    </HBox>
+
+    <GridPane hgap="8" vgap="8">
+        <Label text="제목:"           GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="titleField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="시작 날짜:"       GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="startPicker" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="종료 날짜:"       GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="endPicker"   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="메모:"            GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextArea fx:id="memoArea"     GridPane.rowIndex="3" GridPane.columnIndex="1"
+                  prefRowCount="3"/>
+    </GridPane>
+
+    <HBox spacing="8" alignment="CENTER_RIGHT">
+       
+        <Button text="저장" onAction="#onSave" fx:id="saveBtn"/>
+    </HBox>
+</VBox>

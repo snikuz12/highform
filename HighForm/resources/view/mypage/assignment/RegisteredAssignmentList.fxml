@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="600" prefWidth="700" style="-fx-background-color:#c0c0c8; -fx-border-color:black; -fx-border-width:3;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mypage.controller.AssignmentController">
+
+    <!-- ───── 타이틀바 ───── -->
+    <Label layoutX="10" layoutY="10" prefHeight="40" prefWidth="680" style="-fx-background-color:#00007b; -fx-text-fill:white; -fx-font-size:26px;" text="등록된 과제" />
+
+
+    <!-- ───── Win98 스타일 X 닫기 버튼 추가 ───── -->
+    <Button fx:id="closeButton" layoutX="654.0" layoutY="16.0" onAction="#handleCloseButton" prefHeight="28" prefWidth="28" styleClass="button close-button" text="X" />
+
+    <!-- ───── 과제 리스트 ───── -->
+    <VBox fx:id="assignmentListBox" layoutX="10" layoutY="70" prefHeight="460" prefWidth="680" style="-fx-background-color:#d4d0c8; -fx-border-color:black; -fx-border-width:2;">
+
+        <!-- 헤더 -->
+        <HBox spacing="0" style="-fx-padding:0;                      -fx-background-color:#e0e0e0;                      -fx-border-color:black;                      -fx-border-width:0 0 2 0;">
+            <Label maxWidth="60" minWidth="60" prefWidth="60" style="-fx-font-size:18px; -fx-alignment:center; -fx-border-color:black; -fx-border-width:0 1 0 0;" text="No." />
+            <Label maxWidth="300" minWidth="300" prefWidth="300" style="-fx-font-size:18px; -fx-alignment:center; -fx-border-color:black; -fx-border-width:0 1 0 0;" text="과제명" />
+            <Label maxWidth="120" minWidth="120" prefWidth="120" style="-fx-font-size:18px; -fx-alignment:center; -fx-border-color:black; -fx-border-width:0 1 0 0;" text="현황" />
+            <Label maxWidth="200" minWidth="200" prefWidth="200" style="-fx-font-size:18px; -fx-alignment:center; -fx-border-color:black; -fx-border-width:0;" text="마감일" />
+        </HBox>
+        <!-- 데이터 행은 컨트롤러가 동적 추가 -->
+    </VBox>
+
+    <!-- ───── 페이지네이션 ───── -->
+    <HBox fx:id="paginationBox" alignment="CENTER" layoutX="10" layoutY="550" prefHeight="40" prefWidth="680" spacing="8" />
+</AnchorPane>

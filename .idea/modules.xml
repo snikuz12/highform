@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/HighForm/HighForm.iml" filepath="$PROJECT_DIR$/HighForm/HighForm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/highform.iml" filepath="$PROJECT_DIR$/.idea/highform.iml" />
+    </modules>
+  </component>
+</project>

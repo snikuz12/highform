@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.login.controller.LoadingController" style="-fx-background-color: #188492;">
+</StackPane>
